@@ -1,7 +1,10 @@
+import 'package:evently/core/resources/dialog_utiles.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/resources/app_constants.dart';
 import '../../../core/resources/assets_manager.dart';
+import '../../../core/resources/routes_manager.dart';
 import '../../../core/resources/strings_manager.dart';
 import '../../../core/reusable_components/custom_button.dart';
 import '../../../core/reusable_components/custom_field.dart';
@@ -19,6 +22,7 @@ class _SignupScreenState extends State<SignupScreen> {
   late TextEditingController passController;
   late TextEditingController confirmPassController;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
   @override
   void initState() {
     // TODO: implement initState
@@ -28,6 +32,7 @@ class _SignupScreenState extends State<SignupScreen> {
     passController = TextEditingController();
     confirmPassController = TextEditingController();
   }
+
   @override
   void dispose() {
     nameController.dispose();
@@ -36,14 +41,23 @@ class _SignupScreenState extends State<SignupScreen> {
     confirmPassController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
+    double screenWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
     return Scaffold(
       appBar: AppBar(
-        title: Image.asset(AssetsManager.logo,
-          color: Theme.of(context).colorScheme.primary,
-          width: screenWidth*0.45,),
+        title: Image.asset(
+          AssetsManager.logo,
+          color: Theme
+              .of(context)
+              .colorScheme
+              .primary,
+          width: screenWidth * 0.45,
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(17),
@@ -53,14 +67,21 @@ class _SignupScreenState extends State<SignupScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(StringsManager.createAccTitle,style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                Text(
+                  StringsManager.createAccTitle,
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .labelSmall
+                      ?.copyWith(
                     fontSize: 24,
-                    fontWeight: FontWeight.w600
-                ),),
-                SizedBox(height: 24,),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(height: 24),
                 CustomField(
                   validation: (value) {
-                    if(value==null || value.isEmpty){
+                    if (value == null || value.isEmpty) {
                       return "Name can't empty";
                     }
                     return null;
@@ -70,13 +91,13 @@ class _SignupScreenState extends State<SignupScreen> {
                   controller: nameController,
                   keyboard: TextInputType.name,
                 ),
-                SizedBox(height: 16,),
+                SizedBox(height: 16),
                 CustomField(
                   validation: (value) {
-                    if(value==null || value.isEmpty){
-                      return "Email can't empty";
+                    if (value == null || value.isEmpty) {
+                      return "Email can't be empty";
                     }
-                    if(!RegExp(AppConstants.emailRegex).hasMatch(value)){
+                    if (!RegExp(AppConstants.emailRegex).hasMatch(value)) {
                       return "Invalid email";
                     }
                     return null;
@@ -86,13 +107,13 @@ class _SignupScreenState extends State<SignupScreen> {
                   controller: emailController,
                   keyboard: TextInputType.emailAddress,
                 ),
-                SizedBox(height: 16,),
+                SizedBox(height: 16),
                 CustomField(
                   validation: (value) {
-                    if(value==null || value.isEmpty){
+                    if (value == null || value.isEmpty) {
                       return "Password can't empty";
                     }
-                    if(value.length<8){
+                    if (value.length < 8) {
                       return "Password can't be less than 8 characters";
                     }
                     return null;
@@ -103,11 +124,11 @@ class _SignupScreenState extends State<SignupScreen> {
                   controller: passController,
                   keyboard: TextInputType.text,
                 ),
-                SizedBox(height: 16,),
+                SizedBox(height: 16),
                 CustomField(
                   isPassword: true,
                   validation: (value) {
-                    if(value != passController.text){
+                    if (value != passController.text) {
                       return "Passwords don't match";
                     }
                     return null;
@@ -117,39 +138,78 @@ class _SignupScreenState extends State<SignupScreen> {
                   controller: confirmPassController,
                   keyboard: TextInputType.text,
                 ),
-                SizedBox(height: 52,),
+                SizedBox(height: 52),
 
-                CustomButton(title: "Sign Up", onClick: () {
-                  if(formKey.currentState?.validate()??false){
-                    print("Account created successfully");
-                  }
-                },),
-                SizedBox(height: 24,),
+                CustomButton(
+                  title: "Sign Up",
+                  onClick: () {
+                    if (formKey.currentState?.validate() ?? false) {
+                      createNewAccount();
+                    }
+                  },
+                ),
+                SizedBox(height: 24),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Already have an account?",style: Theme
-                        .of(context)
-                        .textTheme
-                        .bodySmall?.copyWith(
-                        fontSize: 14
-                    ),),
-                    TextButton(
-                        style: TextButton.styleFrom(
-                          padding: EdgeInsets.zero,
-                        ),
-                        onPressed: (){
-
-                        },
-                        child: Text("Login",style:Theme.of(context).textTheme.titleSmall)
+                    Text(
+                      "Already have an account?",
+                      style: Theme
+                          .of(
+                        context,
+                      )
+                          .textTheme
+                          .bodySmall
+                          ?.copyWith(fontSize: 14),
                     ),
-                  ],),
-
+                    TextButton(
+                      style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(RoutesManager.signIn);
+                      },
+                      child: Text(
+                        "Login",
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .titleSmall,
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  createNewAccount() async {
+    try {
+      DialogUtiles.showLoadingDialog(context);
+      var credentials = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+        email: emailController.text,
+        password: passController.text,
+      );
+      Navigator.of(context).pop();
+      Navigator.of(context).pushNamed(RoutesManager.home);
+      print(credentials.user?.uid);
+    } on FirebaseAuthException catch (e) {
+      Navigator.of(context).pop();
+      if (e.code == 'weak-password') {
+        DialogUtiles.showMessageDialog(
+            context: context,
+            content: 'The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        DialogUtiles.showMessageDialog(
+            context: context,
+            content: 'The account already exists for that email.');
+      }
+    }
+    catch (e) {
+      print('Error catch $e');
+    }
   }
 }
