@@ -1,4 +1,6 @@
 import 'package:evently/providers/theme_provider.dart';
+import 'package:evently/ui/home/screen/home_screen.dart';
+import 'package:evently/ui/signin/screen/signin_screen.dart';
 import 'package:evently/ui/signup/screen/signup_screen.dart';
 import 'package:evently/ui/start/screen/start_screen.dart';
 import 'package:flutter/material.dart';
@@ -31,9 +33,11 @@ class MyApp extends StatelessWidget {
       themeMode: provider.themeMode,
       routes: {
         RoutesManager.start:(context)=>StartScreen(),
-        RoutesManager.signup:(context)=>SignupScreen()
+        RoutesManager.signup:(context)=>SignupScreen(),
+        RoutesManager.signIn:(context)=>SignInScreen(),
+        RoutesManager.home:(context)=>HomeScreen(),
       },
-      initialRoute: RoutesManager.signup,
+      initialRoute: RoutesManager.signIn,
     );
   }
 }
