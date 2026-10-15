@@ -3,6 +3,7 @@ import 'package:evently/core/resources/colors_manager.dart';
 import 'package:evently/core/resources/routes_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -30,7 +31,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         ),
         leading: currentIndex > 0
             ? IconButton(
-          icon:  Icon(Icons.arrow_back_ios, color: Colors.black),
+          icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
           onPressed: () {
             introKey.currentState?.previous();
           },
@@ -39,7 +40,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         actions: [
           if (currentIndex == 0)
             TextButton(
-              onPressed: () {
+              onPressed: () async {
+                await saveOnboarding(); // Save preference on Skip
                 navigateToSignIn();
               },
               child: Text(
@@ -50,7 +52,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ),
               ),
             ),
-           SizedBox(width: 8),
+          const SizedBox(width: 8),
         ],
       ),
       body: IntroductionScreen(
@@ -85,26 +87,27 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           ),
         ],
         dotsDecorator: DotsDecorator(
-          activeSize:  Size(20, 8),
-          size:  Size(8, 8),
+          activeSize: const Size(20, 8),
+          size: const Size(8, 8),
           activeColor: ColorsManager.lightPrimary,
           color: ColorsManager.unselectedTabColor,
-          spacing:  EdgeInsets.symmetric(horizontal: 4),
+          spacing: const EdgeInsets.symmetric(horizontal: 4),
           activeShape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(25),
           ),
         ),
       ),
       bottomNavigationBar: Padding(
-        padding:  EdgeInsets.fromLTRB(16, 0, 16, 24),
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
         child: SizedBox(
           width: double.infinity,
           height: 55,
           child: ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
               if (currentIndex < 2) {
                 introKey.currentState?.next();
               } else {
+                await saveOnboarding();
                 navigateToSignIn();
               }
             },
@@ -117,7 +120,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ),
             child: Text(
               currentIndex == 2 ? "Get started" : "Next",
-              style:  TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
@@ -141,7 +144,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         child: Text(
           title,
           textAlign: TextAlign.start,
-          style:  TextStyle(
+          style: const TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.bold,
             color: Colors.black,
@@ -153,27 +156,31 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         child: Text(
           body,
           textAlign: TextAlign.start,
-          style:  TextStyle(
+          style: const TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.w400,
             color: ColorsManager.lightSecondaryColor,
-            // height: 1.4,
           ),
         ),
       ),
       image: Center(
         child: Padding(
-          padding:  EdgeInsets.symmetric(vertical: 8.0),
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Image.asset(imagePath, fit: BoxFit.contain),
         ),
       ),
-      decoration:  PageDecoration(
+      decoration: const PageDecoration(
         pageColor: ColorsManager.whiteColor,
         contentMargin: EdgeInsets.symmetric(horizontal: 16),
         bodyAlignment: Alignment.topCenter,
         imagePadding: EdgeInsets.only(bottom: 24),
       ),
     );
+  }
+
+  Future<void> saveOnboarding() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('onBoarding', true);
   }
 
   void navigateToSignIn() {
