@@ -18,20 +18,33 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    final theme = Theme.of(context);
+    final bool isDarkMode = theme.brightness == Brightness.dark;
+
+
+    final String currentLogo = isDarkMode ? AssetsManager.logoD : AssetsManager.logo;
+    final String image1 = isDarkMode ? AssetsManager.onboarding1D : AssetsManager.onboarding1;
+    final String image2 = isDarkMode ? AssetsManager.onboarding2D : AssetsManager.onboarding2;
+    final String image3 = isDarkMode ? AssetsManager.onboarding3D : AssetsManager.onboarding3;
+
     return Scaffold(
-      backgroundColor: ColorsManager.whiteColor,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
         title: Image.asset(
-          AssetsManager.logo,
+          currentLogo,
           width: 120,
           height: 40,
         ),
         leading: currentIndex > 0
             ? IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: theme.colorScheme.primary,
+          ),
           onPressed: () {
             introKey.currentState?.previous();
           },
@@ -41,13 +54,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           if (currentIndex == 0)
             TextButton(
               onPressed: () async {
-                await saveOnboarding(); // Save preference on Skip
+                await saveOnboarding();
                 navigateToSignIn();
               },
               child: Text(
                 "Skip",
-                style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                  color: Colors.black,
+                style: theme.textTheme.labelSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -60,7 +72,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         showDoneButton: false,
         showNextButton: false,
         showSkipButton: false,
-        globalBackgroundColor: ColorsManager.whiteColor,
+        globalBackgroundColor: theme.scaffoldBackgroundColor,
         onChange: (index) {
           setState(() {
             currentIndex = index;
@@ -71,25 +83,25 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             context,
             title: "Find Events That Inspire You",
             body: "Dive into a world of events crafted to fit your unique interests. Whether you're into live music, art workshops, professional networking, or simply discovering new experiences, we have something for everyone. Our curated recommendations will help you explore, connect, and make the most of every opportunity around you.",
-            imagePath: AssetsManager.onboarding1,
+            imagePath: image1,
           ),
           buildPage(
             context,
             title: "Effortless Event Planning",
             body: "Take the hassle out of organizing events with our all-in-one planning tools. From setting up invites and managing RSVPs to scheduling reminders and coordinating details, we’ve got you covered. Plan with ease and focus on what matters – creating an unforgettable experience for you and your guests.",
-            imagePath: AssetsManager.onboarding2,
+            imagePath: image2,
           ),
           buildPage(
             context,
             title: "Connect with Friends & Share Moments",
             body: "Make every event memorable by sharing the experience with others. Our platform lets you invite friends, keep everyone in the loop, and celebrate moments together. Capture and share the excitement with your network, so you can relive the highlights and cherish the memories.",
-            imagePath: AssetsManager.onboarding3,
+            imagePath: image3,
           ),
         ],
         dotsDecorator: DotsDecorator(
           activeSize: const Size(20, 8),
           size: const Size(8, 8),
-          activeColor: ColorsManager.lightPrimary,
+          activeColor: theme.colorScheme.primary,
           color: ColorsManager.unselectedTabColor,
           spacing: const EdgeInsets.symmetric(horizontal: 4),
           activeShape: RoundedRectangleBorder(
@@ -112,7 +124,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               }
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: ColorsManager.lightPrimary,
+              backgroundColor: theme.colorScheme.primary,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
@@ -120,11 +132,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ),
             child: Text(
               currentIndex == 2 ? "Get started" : "Next",
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-              ),
+              style: theme.textTheme.labelMedium,
             ),
           ),
         ),
@@ -138,17 +146,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         required String body,
         required String imagePath,
       }) {
+    final theme = Theme.of(context);
+
     return PageViewModel(
       titleWidget: SizedBox(
         width: double.infinity,
         child: Text(
           title,
           textAlign: TextAlign.start,
-          style: const TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ),
+          style: theme.textTheme.titleMedium,
         ),
       ),
       bodyWidget: SizedBox(
@@ -156,11 +162,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         child: Text(
           body,
           textAlign: TextAlign.start,
-          style: const TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w400,
-            color: ColorsManager.lightSecondaryColor,
-          ),
+          style: theme.textTheme.bodySmall,
         ),
       ),
       image: Center(
@@ -169,11 +171,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           child: Image.asset(imagePath, fit: BoxFit.contain),
         ),
       ),
-      decoration: const PageDecoration(
-        pageColor: ColorsManager.whiteColor,
-        contentMargin: EdgeInsets.symmetric(horizontal: 16),
+      decoration: PageDecoration(
+        pageColor: theme.scaffoldBackgroundColor,
+        contentMargin: const EdgeInsets.symmetric(horizontal: 16),
         bodyAlignment: Alignment.topCenter,
-        imagePadding: EdgeInsets.only(bottom: 24),
+        imagePadding: const EdgeInsets.only(bottom: 24),
       ),
     );
   }

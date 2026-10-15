@@ -1,5 +1,6 @@
 abstract final class AssetsManager {
   static const String logo = "assets/images/logo (1).png";
+  static const String logoD= "assets/images/logo (1) d.png";
   static const String beingCreative = "assets/images/being_creative.png";
   static const String moon = "assets/images/moon.svg";
   static const String moonSelected = "assets/images/moon_selected.svg";
@@ -42,6 +43,9 @@ abstract final class AssetsManager {
   static const String search = "assets/images/search.svg";
   static const String route = "assets/images/route.png";
   static const String onboarding1 = "assets/images/onboarding1.png";
+  static const String onboarding1D = "assets/images/onboarding1 d.png";
   static const String onboarding2 = "assets/images/onboarding image2.png";
+  static const String onboarding2D = "assets/images/onboarding image2 d.png";
   static const String onboarding3 = "assets/images/onboarding3.png";
+  static const String onboarding3D = "assets/images/onboarding3 d.png";
 }
