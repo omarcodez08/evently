@@ -1,4 +1,5 @@
 import 'package:evently/providers/theme_provider.dart';
+import 'package:evently/ui/home/onboarding/onboarding_screen.dart';
 import 'package:evently/ui/home/screen/home_screen.dart';
 import 'package:evently/ui/signin/screen/signin_screen.dart';
 import 'package:evently/ui/signup/screen/signup_screen.dart';
@@ -39,10 +40,12 @@ class MyApp extends StatelessWidget {
         RoutesManager.signup: (context) => SignupScreen(),
         RoutesManager.signIn: (context) => SignInScreen(),
         RoutesManager.home: (context) => HomeScreen(),
+        RoutesManager.onboarding: (context) =>OnboardingScreen(),
       },
-      initialRoute: FirebaseAuth.instance.currentUser != null
-          ? RoutesManager.home
-          : RoutesManager.signIn,
+       initialRoute: RoutesManager.onboarding
+      //FirebaseAuth.instance.currentUser != null
+      //     ? RoutesManager.home
+      //     : RoutesManager.signIn,
     );
   }
 }
