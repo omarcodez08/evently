@@ -5,6 +5,19 @@ import 'colors_manager.dart';
 class AppTheme {
   static ThemeMode themeMode = ThemeMode.light;
   static ThemeData lightTheme = ThemeData(
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      backgroundColor: Colors.white,
+      selectedLabelStyle: TextStyle(
+        fontWeight: FontWeight.w400,
+        fontSize: 12,
+        color: ColorsManager.lightPrimary
+      ),
+      unselectedLabelStyle: TextStyle(
+        fontWeight: FontWeight.w400,
+        fontSize: 12,
+        color: ColorsManager.unselectedTabColor
+      )
+    ),
       colorScheme: ColorScheme.light(
           primary: ColorsManager.lightPrimary,
           onPrimary:ColorsManager.lightPrimary,
@@ -48,6 +61,19 @@ class AppTheme {
       )
   );
   static ThemeData darkTheme = ThemeData(
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      backgroundColor: ColorsManager.darkBackground,
+      selectedLabelStyle: TextStyle(
+          fontWeight: FontWeight.w400,
+          fontSize: 12,
+          color: ColorsManager.darkPrimary,
+      ),
+      unselectedLabelStyle: TextStyle(
+          fontWeight: FontWeight.w400,
+          fontSize: 12,
+          color: ColorsManager.unselectedTabColor
+      )
+  ),
       colorScheme: ColorScheme.dark(
           primary: ColorsManager.darkPrimary,
           onPrimary:ColorsManager.whiteColor,

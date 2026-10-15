@@ -12,4 +12,5 @@ abstract final class ColorsManager {
   static const Color darkUnselectedSettings = Color(0xff001440);
   static const Color lightFieldBorderColor = Color(0xffF0F0F0);
   static const Color darkFieldBorderColor = Color(0xff002D8F);
+  static const Color unselectedTabColor = Color(0xffB9B9B9);
 }
