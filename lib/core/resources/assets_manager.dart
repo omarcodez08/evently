@@ -48,4 +48,5 @@ abstract final class AssetsManager {
   static const String onboarding2D = "assets/images/onboarding image2 d.png";
   static const String onboarding3 = "assets/images/onboarding3.png";
   static const String onboarding3D = "assets/images/onboarding3 d.png";
+  static const String google = "assets/images/google.png";
 }

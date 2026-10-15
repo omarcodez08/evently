@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evently/core/resources/assets_manager.dart';
 import 'package:evently/providers/theme_provider.dart';
 import 'package:evently/ui/start/widgets/language_switch.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +23,7 @@ class HomeTab extends StatelessWidget {
               children: [
                 Expanded(
                   child: Column(
-                    crossAxisAlignment: .start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         "Welcome Back ✨",
@@ -29,10 +31,27 @@ class HomeTab extends StatelessWidget {
                           context,
                         ).textTheme.bodySmall?.copyWith(fontSize: 14),
                       ),
-                      Text(
-                        "John Safwat",
-                        style: Theme.of(context).textTheme.titleMedium
-                            ?.copyWith(fontWeight: FontWeight.w500),
+                      FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+                        future: FirebaseFirestore.instance
+                            .collection('Users')
+                            .doc(FirebaseAuth.instance.currentUser?.uid)
+                            .get(),
+                        builder: (context, username) {
+                          String displayName = "";
+
+                          if (username.hasData && username.data!.exists) {
+                            var userData = username.data!.data();
+                            displayName = userData?['name'] ?? FirebaseAuth.instance.currentUser?.displayName ?? "";
+                          } else {
+                            displayName = FirebaseAuth.instance.currentUser?.displayName ?? "";
+                          }
+
+                          return Text(
+                            displayName,
+                            style: Theme.of(context).textTheme.titleMedium
+                                ?.copyWith(fontWeight: FontWeight.w500),
+                          );
+                        },
                       ),
                     ],
                   ),

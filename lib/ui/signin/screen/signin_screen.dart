@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:evently/core/resources/colors_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../../core/resources/app_constants.dart';
 import '../../../core/resources/assets_manager.dart';
@@ -8,6 +11,7 @@ import '../../../core/resources/routes_manager.dart';
 import '../../../core/resources/strings_manager.dart';
 import '../../../core/reusable_components/custom_button.dart';
 import '../../../core/reusable_components/custom_field.dart';
+import '../../../model/my_user.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -39,13 +43,22 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
+    double screenWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
+    bool isDarkMode = Theme
+        .of(context)
+        .brightness == Brightness.dark;
 
     return Scaffold(
       appBar: AppBar(
         title: Image.asset(
           AssetsManager.logo,
-          color: Theme.of(context).colorScheme.primary,
+          color: Theme
+              .of(context)
+              .colorScheme
+              .primary,
           width: screenWidth * 0.45,
         ),
       ),
@@ -59,7 +72,11 @@ class _SignInScreenState extends State<SignInScreen> {
               children: [
                 Text(
                   StringsManager.loginTitle,
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .labelSmall
+                      ?.copyWith(
                     fontSize: 24,
                     fontWeight: FontWeight.w600,
                   ),
@@ -104,7 +121,10 @@ class _SignInScreenState extends State<SignInScreen> {
                     alignment: Alignment.centerRight,
                     child: Text(
                       "Forgot password?",
-                      style: Theme.of(context).textTheme.titleSmall,
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .titleSmall,
                     ),
                   ),
                 ),
@@ -123,9 +143,13 @@ class _SignInScreenState extends State<SignInScreen> {
                   children: [
                     Text(
                       "Don't have an account?",
-                      style: Theme.of(
+                      style: Theme
+                          .of(
                         context,
-                      ).textTheme.bodySmall?.copyWith(fontSize: 14),
+                      )
+                          .textTheme
+                          .bodySmall
+                          ?.copyWith(fontSize: 14),
                     ),
                     TextButton(
                       style: TextButton.styleFrom(padding: EdgeInsets.zero),
@@ -134,10 +158,83 @@ class _SignInScreenState extends State<SignInScreen> {
                       },
                       child: Text(
                         "Sign Up",
-                        style: Theme.of(context).textTheme.titleSmall,
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .titleSmall,
                       ),
                     ),
                   ],
+                ),
+                SizedBox(height: 16),
+
+                Row(
+                  children: [
+                    Expanded(
+                      child: Divider(
+                        color: isDarkMode
+                            ? ColorsManager.darkFieldBorderColor
+                            : ColorsManager.lightFieldBorderColor,
+                        thickness: 1,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Text(
+                        "Or",
+                        style: TextStyle(
+                          color: isDarkMode
+                              ? ColorsManager.darkPrimary
+                              : ColorsManager.lightPrimary,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Divider(
+                        color: isDarkMode
+                            ? ColorsManager.darkFieldBorderColor
+                            : ColorsManager.lightFieldBorderColor,
+                        thickness: 1,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: OutlinedButton.icon(
+                    onPressed: () {
+                      signInWithGoogle();
+                    },
+                    style: OutlinedButton.styleFrom(
+                      side: BorderSide(
+                        color: isDarkMode
+                            ? ColorsManager.darkFieldBorderColor
+                            : ColorsManager.lightFieldBorderColor,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                    icon: Image.asset(
+                      AssetsManager.google,
+                      height: 24,
+                      width: 24,
+                    ),
+                    label: Text(
+                      "Login with Google",
+                      style: TextStyle(
+                        color: Theme
+                            .of(context)
+                            .colorScheme
+                            .primary,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -146,22 +243,90 @@ class _SignInScreenState extends State<SignInScreen> {
       ),
     );
   }
+
   SignIn() async {
     try {
       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: emailController.text,
-          password: passController.text,
+        email: emailController.text,
+        password: passController.text,
       );
-      Navigator.of(context).pop;
+      Navigator
+          .of(context)
+          .pop;
       Navigator.of(context).pushNamed(RoutesManager.home);
     } on FirebaseAuthException catch (e) {
-      Navigator.of(context).pop;
+      Navigator
+          .of(context)
+          .pop;
 
       if (e.code == 'user-not-found') {
-        DialogUtiles.showMessageDialog(context: context, content: 'No user found for that email.');
+        DialogUtiles.showMessageDialog(
+          context: context,
+          content: 'No user found for that email.',
+        );
       } else if (e.code == 'wrong-password') {
-        DialogUtiles.showMessageDialog(context: context, content: 'Wrong password provided for that user.');
+        DialogUtiles.showMessageDialog(
+          context: context,
+          content: 'Wrong password provided for that user.',
+        );
       }
+    }
+  }
+
+  Future<void> signInWithGoogle() async {
+    try {
+      print("Initializing Google Sign In...");
+      final GoogleSignIn googleSignIn = GoogleSignIn.instance;
+
+      // Initialize with your Web Client ID
+      await googleSignIn.initialize(
+        serverClientId: '447892618722-5acd28mrfc3vkrme4nj277k88nionage.apps.googleusercontent.com',
+      );
+
+      print("Opening Google account picker...");
+      final GoogleSignInAccount? googleUser = await googleSignIn.authenticate();
+
+      if (googleUser == null) {
+        print("Google Sign-In was cancelled by the user.");
+        return;
+      }
+
+      print("Getting auth details for: ${googleUser.email}");
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+
+      // Pass only idToken for the current google_sign_in package version
+      final credential = GoogleAuthProvider.credential(
+        idToken: googleAuth.idToken,
+      );
+
+      print("Signing into Firebase with Google credential...");
+      final userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+      final firebaseUser = userCredential.user;
+
+      if (firebaseUser != null) {
+        print("Firebase user signed in successfully: ${firebaseUser.uid}");
+
+        MyUser user = MyUser(
+          id: firebaseUser.uid,
+          name: firebaseUser.displayName ?? "",
+          email: firebaseUser.email ?? "",
+        );
+
+        // Save user to Firestore under the "Users" collection
+        await FirebaseFirestore.instance
+            .collection(MyUser.collectionName)
+            .doc(user.id)
+            .set(user.toFireStore());
+
+        print("User saved to Firestore. Navigating to home...");
+
+        if (!mounted) return;
+        Navigator.of(context).pushReplacementNamed(RoutesManager.home);
+      }
+    } catch (e) {
+      print("Error in signInWithGoogle: $e");
+      if (!mounted) return;
+      DialogUtiles.showMessageDialog(context: context, content: e.toString());
     }
   }
 }
