@@ -1,6 +1,7 @@
 import 'package:evently/core/resources/assets_manager.dart';
 import 'package:evently/providers/theme_provider.dart';
 import 'package:evently/ui/start/widgets/language_switch.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -11,6 +12,10 @@ class HomeTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
+
+    // Retrieve Google Account username directly from Firebase Auth
+    String googleUserName = FirebaseAuth.instance.currentUser?.displayName ?? "";
+
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -21,7 +26,7 @@ class HomeTab extends StatelessWidget {
               children: [
                 Expanded(
                   child: Column(
-                    crossAxisAlignment: .start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         "Welcome Back ✨",
@@ -30,7 +35,7 @@ class HomeTab extends StatelessWidget {
                         ).textTheme.bodySmall?.copyWith(fontSize: 14),
                       ),
                       Text(
-                        "John Safwat",
+                        googleUserName,
                         style: Theme.of(context).textTheme.titleMedium
                             ?.copyWith(fontWeight: FontWeight.w500),
                       ),
@@ -57,8 +62,8 @@ class HomeTab extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(width: 4),
-                    LanguageSwitch(
+                    const SizedBox(width: 4),
+                    const LanguageSwitch(
                       title: "EN",
                       languageCode: "en",
                       selectedLanguage: "en",
