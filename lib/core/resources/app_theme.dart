@@ -5,19 +5,20 @@ import 'colors_manager.dart';
 class AppTheme {
   static ThemeMode themeMode = ThemeMode.light;
   static ThemeData lightTheme = ThemeData(
-    bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      backgroundColor: Colors.white,
-      selectedLabelStyle: TextStyle(
-        fontWeight: FontWeight.w400,
-        fontSize: 12,
-        color: ColorsManager.lightPrimary
+      fontFamily: "Poppins",
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          backgroundColor: Colors.white,
+          selectedLabelStyle: TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: 12,
+              color: ColorsManager.lightPrimary
+          ),
+          unselectedLabelStyle: TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: 12,
+              color: ColorsManager.unselectedTabColor
+          )
       ),
-      unselectedLabelStyle: TextStyle(
-        fontWeight: FontWeight.w400,
-        fontSize: 12,
-        color: ColorsManager.unselectedTabColor
-      )
-    ),
       colorScheme: ColorScheme.light(
           primary: ColorsManager.lightPrimary,
           onPrimary:ColorsManager.lightPrimary,
@@ -57,23 +58,39 @@ class AppTheme {
               color: ColorsManager.lightPrimary,
               decoration: TextDecoration.underline,
               decorationColor: ColorsManager.lightPrimary
+          ),
+          displaySmall: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500
+          ),
+          bodyMedium: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: Colors.white
+          ),
+          headlineSmall: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 16,
+              color: ColorsManager.lightPrimary
           )
       )
   );
   static ThemeData darkTheme = ThemeData(
+      fontFamily: "Poppins",
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      backgroundColor: ColorsManager.darkBackground,
-      selectedLabelStyle: TextStyle(
-          fontWeight: FontWeight.w400,
-          fontSize: 12,
-          color: ColorsManager.darkPrimary,
+          backgroundColor: ColorsManager.darkBackground,
+          selectedLabelStyle: TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: 12,
+              color: ColorsManager.darkPrimary
+          ),
+          unselectedLabelStyle: TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: 12,
+              color: ColorsManager.unselectedTabColor
+          )
       ),
-      unselectedLabelStyle: TextStyle(
-          fontWeight: FontWeight.w400,
-          fontSize: 12,
-          color: ColorsManager.unselectedTabColor
-      )
-  ),
+
       colorScheme: ColorScheme.dark(
           primary: ColorsManager.darkPrimary,
           onPrimary:ColorsManager.whiteColor,
@@ -87,6 +104,15 @@ class AppTheme {
         centerTitle: true,
       ),
       textTheme: TextTheme(
+          displaySmall: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500
+          ),
+          bodyMedium: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: Colors.white
+          ),
           titleMedium: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w600,
@@ -113,6 +139,11 @@ class AppTheme {
               color: ColorsManager.darkPrimary,
               decoration: TextDecoration.underline,
               decorationColor: ColorsManager.darkPrimary
+          ),
+          headlineSmall: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 16,
+              color: ColorsManager.darkPrimary
           )
       )
 

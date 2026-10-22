@@ -1,39 +1,47 @@
+import 'package:evently/core/resources/app_theme.dart';
+import 'package:evently/core/resources/routes_manager.dart';
 import 'package:evently/providers/theme_provider.dart';
+import 'package:evently/providers/user_provider.dart';
+import 'package:evently/ui/add_event/screen/add_event_screen.dart';
 import 'package:evently/ui/home/onboarding/onboarding_screen.dart';
 import 'package:evently/ui/home/screen/home_screen.dart';
 import 'package:evently/ui/signin/screen/signin_screen.dart';
 import 'package:evently/ui/signup/screen/signup_screen.dart';
 import 'package:evently/ui/start/screen/start_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'core/resources/app_theme.dart';
-import 'core/resources/routes_manager.dart';
 import 'package:evently/firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Check if onboarding was already shown once
   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  final bool onBoarding = prefs.getBool('onBoarding') ?? false;
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  final bool onboardingFinished = prefs.getBool('onBoarding') ?? false;
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(
     ChangeNotifierProvider(
       create: (BuildContext context) => ThemeProvider(),
-      child: MyApp(onboarding: onBoarding),
+      child: MyApp(onboardingFinished: onboardingFinished),
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
-  final bool onboarding;
+  final bool onboardingFinished;
 
-  const MyApp({super.key, required this.onboarding});
+  const MyApp({super.key, required this.onboardingFinished});
 
   @override
   Widget build(BuildContext context) {
     ThemeProvider provider = Provider.of<ThemeProvider>(context);
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
@@ -43,11 +51,16 @@ class MyApp extends StatelessWidget {
         RoutesManager.start: (context) => StartScreen(),
         RoutesManager.signup: (context) => SignupScreen(),
         RoutesManager.signIn: (context) => SignInScreen(),
-        RoutesManager.home: (context) => HomeScreen(),
+        RoutesManager.addevent: (context) => AddEventScreen(),
         RoutesManager.onboarding: (context) => OnboardingScreen(),
+        RoutesManager.home: (context) => ChangeNotifierProvider(
+          create: (context) => UserProvider()..setUserValue(),
+          child: const HomeScreen(),
+        ),
       },
-      // If onboarding is true, it goes to log in
-      initialRoute: onboarding ? RoutesManager.signIn : RoutesManager.onboarding,
+      // Goes to Onboarding ONLY on the first run after installation.
+      // Everytime I open the app, it directly opens the Sign In Screen.
+      initialRoute: onboardingFinished ? RoutesManager.signIn : RoutesManager.onboarding,
     );
   }
 }

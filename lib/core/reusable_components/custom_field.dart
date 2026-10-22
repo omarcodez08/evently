@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -10,8 +11,10 @@ class CustomField extends StatefulWidget {
   final TextInputType keyboard;
   final String? Function(String?) validation;
   final bool isPassword;
+  final int maxLines;
   const CustomField(
       {super.key,
+        this.maxLines = 1,
         required this.validation,
         this.isPassword = false,
         required this.keyboard, required this.hint, required this.prefixPath, required this.controller});
@@ -25,6 +28,7 @@ class _CustomFieldState extends State<CustomField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      maxLines: widget.maxLines,
       keyboardType: widget.keyboard,
       controller:widget.controller,
       validator: widget.validation,
@@ -78,7 +82,9 @@ class _CustomFieldState extends State<CustomField> {
               ?.copyWith(
               fontSize: 14
           ),
-          prefixIcon: Padding(
+          prefixIcon: widget.prefixPath.isEmpty
+              ?null
+              :Padding(
             padding: const EdgeInsets.all(8.0),
             child: SvgPicture.asset(widget.prefixPath),
           ),

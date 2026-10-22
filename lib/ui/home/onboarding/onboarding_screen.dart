@@ -1,9 +1,10 @@
-import 'package:evently/core/resources/assets_manager.dart';
-import 'package:evently/core/resources/colors_manager.dart';
-import 'package:evently/core/resources/routes_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../core/resources/assets_manager.dart';
+import '../../../core/resources/colors_manager.dart';
+import '../../../core/resources/routes_manager.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});

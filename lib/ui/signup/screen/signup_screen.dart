@@ -1,9 +1,9 @@
-import 'package:evently/core/resources/dialog_utiles.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/resources/app_constants.dart';
 import '../../../core/resources/assets_manager.dart';
+import '../../../core/resources/dialog_utiles.dart';
 import '../../../core/resources/routes_manager.dart';
 import '../../../core/resources/strings_manager.dart';
 import '../../../core/reusable_components/custom_button.dart';
@@ -187,7 +187,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
   createNewAccount() async {
     try {
-      DialogUtiles.showLoadingDialog(context);
+      DialogUtils.showLoadingDialog(context);
       var credentials = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(
         email: emailController.text,
@@ -199,11 +199,11 @@ class _SignupScreenState extends State<SignupScreen> {
     } on FirebaseAuthException catch (e) {
       Navigator.of(context).pop();
       if (e.code == 'weak-password') {
-        DialogUtiles.showMessageDialog(
+        DialogUtils.showMessageDialog(
             context: context,
             content: 'The password provided is too weak.');
       } else if (e.code == 'email-already-in-use') {
-        DialogUtiles.showMessageDialog(
+        DialogUtils.showMessageDialog(
             context: context,
             content: 'The account already exists for that email.');
       }

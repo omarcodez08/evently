@@ -1,17 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:evently/core/resources/colors_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../../core/resources/app_constants.dart';
 import '../../../core/resources/assets_manager.dart';
+import '../../../core/resources/colors_manager.dart';
 import '../../../core/resources/dialog_utiles.dart';
 import '../../../core/resources/routes_manager.dart';
 import '../../../core/resources/strings_manager.dart';
 import '../../../core/reusable_components/custom_button.dart';
 import '../../../core/reusable_components/custom_field.dart';
-import '../../../model/my_user.dart';
+import '../../../model/user.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -260,12 +260,12 @@ class _SignInScreenState extends State<SignInScreen> {
           .pop;
 
       if (e.code == 'user-not-found') {
-        DialogUtiles.showMessageDialog(
+        DialogUtils.showMessageDialog(
           context: context,
           content: 'No user found for that email.',
         );
       } else if (e.code == 'wrong-password') {
-        DialogUtiles.showMessageDialog(
+        DialogUtils.showMessageDialog(
           context: context,
           content: 'Wrong password provided for that user.',
         );
@@ -326,7 +326,7 @@ class _SignInScreenState extends State<SignInScreen> {
     } catch (e) {
       print("Error in signInWithGoogle: $e");
       if (!mounted) return;
-      DialogUtiles.showMessageDialog(context: context, content: e.toString());
+      DialogUtils.showMessageDialog(context: context, content: e.toString());
     }
   }
 }

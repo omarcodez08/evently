@@ -5,5 +5,5 @@ abstract final class StringsManager {
   static const String theme = "Theme";
   static const String startActionTitle = "Let’s start";
   static const String createAccTitle = "Create your account";
-  static const String loginTitle = "login to your account";
+  static const String loginTitle = "Login to your account";
 }
