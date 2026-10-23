@@ -113,4 +113,14 @@ class FirestoreManager {
     var eventsStream = docsStream.map((docs) => docs.map((document) => document.data(),).toList(),);
     yield* eventsStream;
   }
+  static Future<void> deleteEvent(EventModel event) {
+    var collection = getEventsCollection();
+    var doc = collection.doc(event.id);
+    return doc.delete();
+  }
+  static Future<void> updateEvent(EventModel event) {
+    var collection = getEventsCollection();
+    var doc = collection.doc(event.id);
+    return doc.set(event);
+  }
 }

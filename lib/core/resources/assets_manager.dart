@@ -49,4 +49,7 @@ abstract final class AssetsManager {
   static const String onboarding3 = "assets/images/onboarding3.png";
   static const String onboarding3D = "assets/images/onboarding3 d.png";
   static const String google = "assets/images/google.png";
+  static const String edit = "assets/images/edit.svg";
+  static const String delete = "assets/images/delete.svg";
+  static const String calendarAdd = "assets/images/calendar-add.svg";
 }
