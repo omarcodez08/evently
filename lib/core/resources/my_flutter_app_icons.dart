@@ -21,8 +21,8 @@ class MyFlutterApp {
   static const _kFontFam = 'MyFlutterApp';
   static const String? _kFontPkg = null;
 
-  static const IconData all = IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData bike = IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData all = IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData bike = IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData birthday_icon = IconData(0xe802, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData book = IconData(0xe803, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData exhibition = IconData(0xe804, fontFamily: _kFontFam, fontPackage: _kFontPkg);

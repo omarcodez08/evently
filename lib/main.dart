@@ -3,6 +3,7 @@ import 'package:evently/core/resources/routes_manager.dart';
 import 'package:evently/providers/theme_provider.dart';
 import 'package:evently/providers/user_provider.dart';
 import 'package:evently/ui/add_event/screen/add_event_screen.dart';
+import 'package:evently/ui/event_details/event_details_screen.dart';
 import 'package:evently/ui/home/onboarding/onboarding_screen.dart';
 import 'package:evently/ui/home/screen/home_screen.dart';
 import 'package:evently/ui/signin/screen/signin_screen.dart';
@@ -14,10 +15,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:evently/firebase_options.dart';
 
+import 'ui/event_details/edit_event/edit_event_screen.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Check if onboarding was already shown once
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   final bool onboardingFinished = prefs.getBool('onBoarding') ?? false;
 
@@ -53,12 +55,14 @@ class MyApp extends StatelessWidget {
         RoutesManager.signIn: (context) => SignInScreen(),
         RoutesManager.addevent: (context) => AddEventScreen(),
         RoutesManager.onboarding: (context) => OnboardingScreen(),
+        RoutesManager.eventDetails: (context) => EventDetailsScreen(),
+        RoutesManager.editEvent: (context) =>EditEventScreen(),
         RoutesManager.home: (context) => ChangeNotifierProvider(
           create: (context) => UserProvider()..setUserValue(),
           child: const HomeScreen(),
         ),
       },
-      // Goes to Onboarding ONLY on the first run after installation.
+      //onboarding only when you run 4 the first time after installation.
       // Everytime I open the app, it directly opens the Sign In Screen.
       initialRoute: onboardingFinished ? RoutesManager.signIn : RoutesManager.onboarding,
     );

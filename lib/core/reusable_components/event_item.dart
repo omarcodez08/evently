@@ -9,6 +9,7 @@ import '../remote/network/firestore_manager.dart';
 import '../resources/app_constants.dart';
 import '../resources/assets_manager.dart';
 import '../resources/dialog_utiles.dart';
+import '../resources/routes_manager.dart';
 
 class EventItem extends StatefulWidget {
   final EventModel event;
@@ -24,86 +25,94 @@ class _EventItemState extends State<EventItem> {
     ThemeProvider provider = Provider.of<ThemeProvider>(context);
     UserProvider userProvider = Provider.of<UserProvider>(context);
     double screenHeight = MediaQuery.of(context).size.height;
-    return Container(
-      height: screenHeight * 0.25,
-      child: Stack(
-        children: [
-          Container(
-            width: double.infinity,
-            height: screenHeight * 0.25,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                  color: Theme
-                      .of(context)
-                      .colorScheme
-                      .secondary
-              ),
-              image: DecorationImage(
-                fit: BoxFit.cover,
-                image: AssetImage(
-                  provider.themeMode == ThemeMode.dark
-                      ? AppConstants.darkEventTypeBackground[widget.event.type]??""
-                      : AppConstants.lightEventTypeBackground[widget.event.type]??"",
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).pushNamed(
+          RoutesManager.eventDetails,
+          arguments: widget.event,
+        );
+      },
+      child: Container(
+        height: screenHeight * 0.25,
+        child: Stack(
+          children: [
+            Container(
+              width: double.infinity,
+              height: screenHeight * 0.25,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                    color: Theme
+                        .of(context)
+                        .colorScheme
+                        .secondary
+                ),
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: AssetImage(
+                    provider.themeMode == ThemeMode.dark
+                        ? AppConstants.darkEventTypeBackground[widget.event.type]??""
+                        : AppConstants.lightEventTypeBackground[widget.event.type]??"",
+                  ),
                 ),
               ),
             ),
-          ),
-          Container(
-            margin: EdgeInsets.all(8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  padding: EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                      color: Theme.of(context).scaffoldBackgroundColor,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: Theme
-                            .of(context)
-                            .colorScheme
-                            .secondary,
-                      )
+            Container(
+              margin: EdgeInsets.all(8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).scaffoldBackgroundColor,
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          color: Theme
+                              .of(context)
+                              .colorScheme
+                              .secondary,
+                        )
+                    ),
+                    child: Text(widget.event.dateAndTime?.toDate().day.toString()??"",style: Theme.of(context).textTheme.headlineSmall,),
                   ),
-                  child: Text(widget.event.dateAndTime?.toDate().day.toString()??"",style: Theme.of(context).textTheme.headlineSmall,),
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(
-                      vertical: 9.5,
-                      horizontal: 8
-                  ),
-                  decoration: BoxDecoration(
-                      color: Theme.of(context).scaffoldBackgroundColor,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: Theme
-                            .of(context)
-                            .colorScheme
-                            .secondary,
-                      )
-                  ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Text(widget.event.title??"",style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500
-                        ),),
-                      ),
-                      IconButton(onPressed: () {
-                        heartClicked(userProvider);
-                      }, icon: SvgPicture.asset(userProvider.user?.favorites?.contains(widget.event.id!)??false
-                          ?AssetsManager.heart_selected
-                          :AssetsManager.heart))
-                    ],
-                  ),
-                )
-              ],
-            ),
-          )
-        ],
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                        vertical: 9.5,
+                        horizontal: 8
+                    ),
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).scaffoldBackgroundColor,
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          color: Theme
+                              .of(context)
+                              .colorScheme
+                              .secondary,
+                        )
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(widget.event.title??"",style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500
+                          ),),
+                        ),
+                        IconButton(onPressed: () {
+                          heartClicked(userProvider);
+                        }, icon: SvgPicture.asset(userProvider.user?.favorites?.contains(widget.event.id!)??false
+                            ?AssetsManager.heart_selected
+                            :AssetsManager.heart))
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

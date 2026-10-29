@@ -23,9 +23,10 @@ class HomeTab extends StatelessWidget {
     ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
     UserProvider userProvider = Provider.of<UserProvider>(context);
 
-    String displayName = userProvider.user?.name
-        ?? FirebaseAuth.instance.currentUser?.displayName
-        ?? "";
+    String displayName =
+        userProvider.user?.name ??
+        FirebaseAuth.instance.currentUser?.displayName ??
+        "";
 
     return SafeArea(
       child: Padding(
@@ -51,218 +52,244 @@ class HomeTab extends StatelessWidget {
                         // Display name immediately using the fallback chain
                         Text(
                           displayName,
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w500, // Fixed shorthand syntax
-                          ),
+                          style: Theme.of(context).textTheme.titleMedium
+                              ?.copyWith(
+                                fontWeight:
+                                    FontWeight.w500, // Fixed shorthand syntax
+                              ),
                         ),
                       ],
                     ),
                   ),
-                  Row(children: [
-                    InkWell(
-                      onTap: (){
-                        if(themeProvider.themeMode==ThemeMode.dark){
-                          themeProvider.changeTheme(ThemeMode.light);
-                        }else{
-                          themeProvider.changeTheme(ThemeMode.dark);
-                        }
-                      },
-                      child: SvgPicture.asset(
-                        themeProvider.themeMode == ThemeMode.dark
-                            ? AssetsManager.moon
-                            : AssetsManager.sun,
-                        colorFilter: ColorFilter.mode(
-                          Theme.of(context).colorScheme.primary,
-                          BlendMode.srcIn, // Fixed parameter name
+                  Row(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          if (themeProvider.themeMode == ThemeMode.dark) {
+                            themeProvider.changeTheme(ThemeMode.light);
+                          } else {
+                            themeProvider.changeTheme(ThemeMode.dark);
+                          }
+                        },
+                        child: SvgPicture.asset(
+                          themeProvider.themeMode == ThemeMode.dark
+                              ? AssetsManager.moon
+                              : AssetsManager.sun,
+                          colorFilter: ColorFilter.mode(
+                            Theme.of(context).colorScheme.primary,
+                            BlendMode.srcIn, // Fixed parameter name
+                          ),
+                          height: 24,
+                          width: 24,
                         ),
-                        height: 24,
-                        width: 24,
                       ),
-                    ),
-                    SizedBox(width: 4,),
-                    LanguageSwitch(
-                      title: "EN",
-                      selectedLanguage: "en",
-                      languageCode: "en",
-                      height: 32,
-                      width: 32,
-                    ),
-                  ],)
+                      SizedBox(width: 4),
+                      LanguageSwitch(
+                        title: "EN",
+                        selectedLanguage: "en",
+                        languageCode: "en",
+                        height: 32,
+                        width: 32,
+                      ),
+                    ],
+                  ),
                 ],
               ),
               TabBar(
-                  labelStyle: Theme.of(context).textTheme.bodyMedium,
-                  unselectedLabelStyle: Theme.of(context).textTheme.displaySmall,
-                  isScrollable: true,
-                  tabAlignment: TabAlignment.start,
-                  indicatorSize: TabBarIndicatorSize.label,
-                  indicatorColor: Theme.of(context).colorScheme.primary,
-                  dividerHeight: 0,
-                  indicatorPadding: EdgeInsets.zero,
-                  indicatorWeight: 0,
-                  indicator: BoxDecoration(
-                      color: Theme.of(context).colorScheme.primary,
-                      borderRadius: BorderRadius.circular(16)
+                labelStyle: Theme.of(context).textTheme.bodyMedium,
+                unselectedLabelStyle: Theme.of(context).textTheme.displaySmall,
+                isScrollable: true,
+                tabAlignment: TabAlignment.start,
+                indicatorSize: TabBarIndicatorSize.label,
+                indicatorColor: Theme.of(context).colorScheme.primary,
+                dividerHeight: 0,
+                indicatorPadding: EdgeInsets.zero,
+                indicatorWeight: 0,
+                indicator: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                tabs: [
+                  Tab(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                      ),
+                      child: Row(
+                        spacing: 8,
+                        children: [
+                          Icon(MyFlutterApp.all),
+                          Text(
+                            "All",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                  tabs: [
-                    Tab(
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 16,vertical: 8),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16),
-                            border: Border.all(
-                                color: Theme
-                                    .of(context)
-                                    .colorScheme
-                                    .secondary
-                            )
-                        ),
-                        child: Row(
-                          spacing:8,
-                          children: [
-                            Icon(MyFlutterApp.all),
-                            Text("All",style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 16
-                            ),)
-                          ],
-                        ),
+                  Tab(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
                       ),
-                    ),
-                    Tab(
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 16,vertical: 8),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
 
-                            border: Border.all(
-                                color: Theme
-                                    .of(context)
-                                    .colorScheme
-                                    .secondary
-                            )
-                        ),
-                        child: Row(
-                          spacing:8,
-                          children: [
-                            Icon(MyFlutterApp.bike),
-                            Text("Sport",style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 16
-                            ),)
-                          ],
+                        border: Border.all(
+                          color: Theme.of(context).colorScheme.secondary,
                         ),
                       ),
+                      child: Row(
+                        spacing: 8,
+                        children: [
+                          Icon(MyFlutterApp.bike),
+                          Text(
+                            "Sport",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    Tab(
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 16,vertical: 8),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16),
+                  ),
+                  Tab(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
 
-                            border: Border.all(
-                                color: Theme
-                                    .of(context)
-                                    .colorScheme
-                                    .secondary
-                            )
-                        ),
-                        child: Row(
-                          spacing:8,
-                          children: [
-                            Icon(MyFlutterApp.birthday_icon),
-                            Text("Birthday",style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 16
-                            ),)
-                          ],
+                        border: Border.all(
+                          color: Theme.of(context).colorScheme.secondary,
                         ),
                       ),
+                      child: Row(
+                        spacing: 8,
+                        children: [
+                          Icon(MyFlutterApp.birthday_icon),
+                          Text(
+                            "Birthday",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    Tab(
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 16,vertical: 8),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16),
+                  ),
+                  Tab(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
 
-                            border: Border.all(
-                                color: Theme
-                                    .of(context)
-                                    .colorScheme
-                                    .secondary
-                            )
-                        ),
-                        child: Row(
-                          spacing:8,
-                          children: [
-                            Icon(MyFlutterApp.book),
-                            Text("Book",style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 16
-                            ),)
-                          ],
+                        border: Border.all(
+                          color: Theme.of(context).colorScheme.secondary,
                         ),
                       ),
+                      child: Row(
+                        spacing: 8,
+                        children: [
+                          Icon(MyFlutterApp.book),
+                          Text(
+                            "Book",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    Tab(
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 16,vertical: 8),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16),
+                  ),
+                  Tab(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
 
-                            border: Border.all(
-                                color: Theme
-                                    .of(context)
-                                    .colorScheme
-                                    .secondary
-                            )
+                        border: Border.all(
+                          color: Theme.of(context).colorScheme.secondary,
                         ),
-                        child: Row(
-                          spacing:8,
-                          children: [
-                            Icon(MyFlutterApp.meeting),
-                            Text("Meeting",style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 16
-                            ),)
-                          ],
-                        ),
+                      ),
+                      child: Row(
+                        spacing: 8,
+                        children: [
+                          Icon(MyFlutterApp.meeting),
+                          Text(
+                            "Meeting",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    Tab(
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 16,vertical: 8),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16),
-                            border: Border.all(
-                                color: Theme
-                                    .of(context)
-                                    .colorScheme
-                                    .secondary
-                            )
-                        ),
-                        child: Row(
-                          spacing:8,
-                          children: [
-                            Icon(MyFlutterApp.exhibition),
-                            Text("Exhibition",style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 16
-                            ),)
-                          ],
+                  ),
+                  Tab(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: Theme.of(context).colorScheme.secondary,
                         ),
                       ),
-                    )
-                  ]),
+                      child: Row(
+                        spacing: 8,
+                        children: [
+                          Icon(MyFlutterApp.exhibition),
+                          Text(
+                            "Exhibition",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
               Expanded(
-                  child: TabBarView(children: [
+                child: TabBarView(
+                  children: [
                     AllView(),
                     SportView(),
                     BirthdayView(),
                     BookView(),
                     MeetingView(),
                     ExhibitionView(),
-                  ]))
+                  ],
+                ),
+              ),
             ],
           ),
         ),
